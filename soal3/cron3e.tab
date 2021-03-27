@@ -1,1 +1,5 @@
+#zip saat senin-jumat 7pagi-6sore(kuliah)
+* 7 * * 1-5 bash /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/soal3d.sh
 
+#unzip selain saat kuliah
+* 18 * * 1-5 unzip -P 'date "+\%m\%d\%Y"' /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/Koleksi.zip && rm /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/Koleksi.zip
