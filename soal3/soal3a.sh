@@ -14,8 +14,8 @@ done
 
 for ((b = 1 ; b < 24 ; b++)); do
     for ((c = b + 1 ; c < 24 ; c++)); do
-        if diff Koleksi_$b Koleksi_$c &> /dev/null; then
-            rm Koleksi_$c
+        if diff Koleksi_"$b".jpeg Koleksi_"$c".jpeg &> /dev/null; then
+            rm Koleksi_"$c".jpeg
         fi
     done
 done
