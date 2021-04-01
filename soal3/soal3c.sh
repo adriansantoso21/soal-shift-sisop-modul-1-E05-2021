@@ -1,3 +1,5 @@
+#!/bin/bash
+
 dir_counter() {
   # menghitung jumlah dir kelinci
   dir_kelinci=$(ls -d Kelinci_* | wc -l)
@@ -8,13 +10,14 @@ dir_counter() {
     # maka 1 = mengunduh kucing
   # apabila kucing lebih banyak atau smdg
     # maka 0 = mengunduh kelinci
-  if [[ $d_kucing -lt $d_kelinci ]]
+  if [[ $dir_kucing -lt $dir_kelinci ]]
   then
     echo 1
   else
     echo 0
   fi
 }
+
 download_img(){
   for i in {1..23}
   do
@@ -43,9 +46,10 @@ download_img(){
   curr_date=$(date "+%d-%m-%Y")
   foldername=$2$curr_date
   movetofolder $foldername
-  }
+}
+
 movetofolder(){
-   img_array=($(ls *.jpg))
+  img_array=($(ls *.jpg))
   
   mkdir "$1"
   mv "Foto.log" "$1/Foto.log"
