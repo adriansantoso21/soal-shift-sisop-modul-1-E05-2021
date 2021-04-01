@@ -33,7 +33,7 @@ download_img(){
 
   array_img=($(ls *.jpg))
 
-  for i in ${!array_img[@]}
+  for i in ${!array_img[*]}
   do
     if [[ $i < 9 ]]
     then
