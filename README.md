@@ -145,7 +145,7 @@ info=$(grep -oP "$regex_info" "$INPUT")
 ### Jawaban 1d
 ```
 # 1d
-printf "ERROR,COUNT\n" > "error_message.csv"
+printf "Error,Count\n" > "error_message.csv"
 grep -oP "$regex_err_msgs" "$INPUT" | sort | uniq -c | sort -nr | while read count msgs;
 do
         printf "%s,%d\n" "$msgs" "$count" >> "error_message.csv"
@@ -155,7 +155,7 @@ done
 ### Penjelasan 1d
 Pada soal 1d diminta untuk menuliskan semua informasi yang didapatkan pada poin 1b ke dalam file `error_message.csv` dengan header `Error,Count`
 ```
-printf "ERROR,COUNT\n" > "error_message.csv"
+printf "Error,Count\n" > "error_message.csv"
 ```
 Kode di atas memasukkan `Error,Count` sebagai header file ke dalam `error_message.csv`.
 ```
@@ -166,10 +166,11 @@ done
 ```
 Kode di atas  menampilkan semua pesan error yang muncul beserta jumlah kemunculannya dari terbanyak ke terkecil. Dimana `while` melakukan looping terhadap var1 `count` dan var2 ` msgs` untuk membaca semua baris dari grep tersebut dan hasilnya dengan format `Error,Count` akan dimasukkan ke dalam file `error_message.csv`.
 
+
 ### Jawaban 1e
 ```
 # 1e
-printf "USERNAME,INFO,ERROR\n" > "user_statistic.csv"
+printf "Username,INFO,ERROR\n" > "user_statistic.csv"
 grep -oP "$regex_username" "$INPUT" | sort | uniq | while read user;
 do
         n_info=$(grep "$user" <<< "$info" | wc -l);
@@ -181,16 +182,20 @@ done
 ### Penjelasan 1e
 Pada soal 1e diminta untuk menuliskan semua informasi yang didapatkan pada poin 1c ke dalam file `user_statistic.csv` dengan header `Username,INFO,ERROR`.
 ```
-printf "USERNAME,INFO,ERROR\n" > "user_statistic.csv"
+printf "Username,INFO,ERROR\n" > "user_statistic.csv"
 ```
 Kode di atas memasukkan `Username,INFO,ERROR` sebagai header file ke dalam `user_statistic.csv`.
 ```
 grep -oP "$regex_username" "$INPUT" | sort | uniq | while read user;
 do
-        n_info=$(grep "$user" <<< "$info" | wc -l);
-        n_error=$(grep "$user" <<< "$err" | wc -l);
+        n_info=$(grep -w "$user" <<< "$info" | wc -l);
+        n_error=$(grep -w "$user" <<< "$err" | wc -l);
       	 printf "%s,%d,%d\n" "$user" "$n_info" "$n_error" >> "user_statistic.csv"
 done
 ```
-Kode di atas  menampilkan jumlah kemunculan log `ERROR` dan `INFO` untuk setiap user-nya. Dimana `while` melakukan looping terhadap var `user` untuk membaca semua baris dari grep tersebut dan hasilnya dengan format `Username,INFO,ERROR` akan dimasukkan ke dalam file `user_statistic.csv`. Kode `n_info=$(grep "$user" <<< "$info" | wc -l)` menghitung berapa dari log `INFO` yang ada user tersebut. Kode `n_error=$(grep "$user" <<< "$err" | wc -l)` menghitung berapa dari log `ERROR` yang ada user tersebut.
+Kode di atas  menampilkan jumlah kemunculan log `ERROR` dan `INFO` untuk setiap user-nya. Dimana `while` melakukan looping terhadap var `user` untuk membaca semua baris dari grep tersebut dan hasilnya dengan format `Username,INFO,ERROR` akan dimasukkan ke dalam file `user_statistic.csv`. Kode `n_info=$(grep -w "$user" <<< "$info" | wc -l)` menghitung berapa dari log `INFO` yang ada user tersebut secara match. Kode `n_error=$(grep -w "$user" <<< "$err" | wc -l)` menghitung berapa dari log `ERROR` yang ada user tersebut secara match.
 
+Kendala selama pengerjaan:
+1. Agak kesulitan dalam menuliskan regex dikarenakan sebelumnya belum pernah mendengar kata tersebut.
+2. Mengalami kendala pada saat akan menuliskan syntax cara membaca multiple lines dari sebuah grep.
+3. Kurang teliti dalalm menulis kode program sehingga outputnya menjadi salah. Contohnya pada pengerjaan soal 1e 
