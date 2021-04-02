@@ -224,22 +224,23 @@ awk 'BEGIN{max=0;min=2000000000;min2=2000000000;FS="\t"}
 ```
 Selanjutnya, akan membaca tiap line dari data dan agar judul dari kolom tidak terbaca maka menggunakan syntax ```if( NR!=1)```
 
-Kita mencari nilai dari Profil Percentage terlebih dahulu dengan rumus di soal ```profitPercentage=($21/($18-$21))*100``` 
+Kita mencari nilai dari Profil Percentage terlebih dahulu dengan rumus di soal 
+```profitPercentage=($21/($18-$21))*100``` 
 
-Untuk mencari Profil Percentage dan row Id nya, maka kita akan melakukan update setiap membaca baris nya jika kondisional nya terpenuhi
+Untuk mencari Profil Percentage dan row Id terbesar, kita akan melakukan update jika kondisional terpenuhi dengan mengupdate variabel ```max``` dengan Profil Perecentage saat ini dan rowId dengan $1 pada data saat ini
 ```
 if (max <= profitPercentage){
-			max=profitPercentage;
-			rowId=$1;
-		}
+	max=profitPercentage;
+	rowId=$1;
+}
 ```
 
 ### Jawaban 2b
-Kita akan mencari tahun transaksi terlebih dahulu dengan menggunakan syntax ```year=substr($3,7,2)``` dimana $3 merupakan kolom dimana kita mencari tahun transaksi, 7 merupakan lokasi awal pencarian karakter dan 2 adalah banyak karakter yang akan diambil
+Kita akan mencari tahun transaksi terlebih dahulu dengan menggunakan syntax ```year=substr($3,7,2)``` dimana $3 merupakan kolom dimana kita mencari tahun transaksi, 7 merupakan lokasi awal pencarian karakter dan 2 adalah banyak karakter yang akan diambil.
 Jika kondisional memenuhi yaitu tahun transaksi adalah 17 dan lokasi nya berada di Albuquerque, maka kita akan membuat array yang berisi nama pelanggan
 ```
 year=substr($3,7,2)
-	if(year==17 && $10=="Albuquerque") names[$7];
+if(year==17 && $10=="Albuquerque") names[$7];
 ```
 
 ### Jawaban 2c
@@ -255,17 +256,17 @@ regions[$13]+=$21
 ```
 
 ### Jawaban 2e
-Untuk bagian terakhir maka akan mencetak hasil sesuai dengan format yang diminta
-Untuk mencetak bagian 2a
+Untuk bagian terakhir maka akan mencetak hasil sesuai dengan format yang diminta  
+Untuk mencetak bagian 2a  
 ```print("Transaksi terakhir dengan profit percentage terbesar yaitu",rowId,"dengan persentase",max,"%.\n")```
 
-Untuk mencetak bagian 2b
-```print("Daftar nama customer di Albuquerque pada tahun 2017 antara lain:")```
-Di sini, untuk mencetak nama masing-masing pelanggan maka kita melakukan iterasi pada array names dan mencetak isi item dalam array nya 
+Untuk mencetak bagian 2b  
+```print("Daftar nama customer di Albuquerque pada tahun 2017 antara lain:")```  
+Di sini, untuk mencetak nama masing-masing pelanggan maka kita melakukan iterasi pada array names dan mencetak isi item dalam array nya  
 ```for (name in names) print name```
 
-Untuk mencetak bagian 2c
-Kita akan mencari segmen dengan jumlah transaksi terkecil dengan cara melakukan iterasi. Di mana dalam iterasi, jika transaksi saat ini lebih kecil dari pada variabel ```min```  maka akan menyimpan nama section pada ```jenis``` dan akan mengupdate variabel ```min``` dengan besar transaksi saat ini
+Untuk mencetak bagian 2c  
+Kita akan mencari segmen dengan jumlah transaksi terkecil dengan cara melakukan iterasi. Di mana dalam iterasi, jika transaksi saat ini lebih kecil dari pada variabel ```min```  maka akan menyimpan nama section pada ```jenis``` dan akan mengupdate variabel ```min``` dengan besar transaksi saat ini  
 ```
 for (transaction in transactions){
 	if(min>=transactions[transaction]){
@@ -277,8 +278,8 @@ for (transaction in transactions){
 
 ```
 
-Untuk mencetak bagian 2d
-Kita akan mencari region dengan total profit terkecil dengan cara melakukan iterasi. Di mana dalam iterasi, jika total profit saat ini lebih kecil dari pada variabel ```min2```  maka akan menyimpan nama region pada ```region2``` dan akan mengupdate variabel ```min2``` dengan total profit saat ini
+Untuk mencetak bagian 2d  
+Kita akan mencari region dengan total profit terkecil dengan cara melakukan iterasi. Di mana dalam iterasi, jika total profit saat ini lebih kecil dari pada variabel ```min2```  maka akan menyimpan nama region pada ```region2``` dan akan mengupdate variabel ```min2``` dengan total profit saat ini  
 ```
 for (region in regions){
 	if(min2>=regions[region]){
@@ -286,6 +287,6 @@ for (region in regions){
 		min2=regions[region]
 	}
 }
-print("\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang paling sedikit adalah",region2, "dengan total keuntungan",min2)	
-
+print("\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang paling sedikit adalah",region2, "dengan total keuntungan",min2)  	
+```
 Terakhir, kita akan memasukkan output dari awk ke dalam file hasil.txt dengan syntax ```Laporan-TokoShiSop.tsv > hasil.txt```
