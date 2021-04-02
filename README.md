@@ -272,7 +272,8 @@ regions[$13]+=$21
 ```
 
 ### Jawaban 2e
-Untuk bagian terakhir maka akan mencetak hasil sesuai dengan format yang diminta :   
+Untuk bagian terakhir maka akan mencetak hasil sesuai dengan format yang diminta :     
+
 __Untuk mencetak bagian 2a__  
 ```print("Transaksi terakhir dengan profit percentage terbesar yaitu",rowId,"dengan persentase",max,"%.\n")```
 
@@ -327,3 +328,130 @@ Kendala selama pengerjaan :
 1. Awalnya agak bingung saat menjalankan beberapa syntax dalam awk.
 2. Agak kesulitan dalam mengambil beberapa karakter dari suatu string (soal 2b).
 3. Kurang teliti saat melihat separator dari file "Laporan-TokoShiSop.tsv" yang berupa tab.
+
+### Soal No 3
+Kuuhaku adalah orang yang sangat suka mengoleksi foto-foto digital, namun Kuuhaku juga merupakan seorang yang pemalas sehingga ia tidak ingin repot-repot mencari foto, selain itu ia juga seorang pemalu, sehingga ia tidak ingin ada orang yang melihat koleksinya tersebut, sayangnya ia memiliki teman bernama Steven yang memiliki rasa kepo yang luar biasa. Kuuhaku pun memiliki ide agar Steven tidak bisa melihat koleksinya, serta untuk mempermudah hidupnya, yaitu dengan meminta bantuan kalian. Idenya adalah :  
+**(a)** Membuat script untuk mengunduh 23 gambar dari "https://loremflickr.com/320/240/kitten" serta menyimpan log-nya ke file "Foto.log". Karena gambar yang diunduh acak, ada kemungkinan gambar yang sama terunduh lebih dari sekali, oleh karena itu kalian harus menghapus gambar yang sama (tidak perlu mengunduh gambar lagi untuk menggantinya). Kemudian menyimpan gambar-gambar tersebut dengan nama "Koleksi_XX" dengan nomor yang berurutan tanpa ada nomor yang hilang (contoh : Koleksi_01, Koleksi_02, ...)  
+**(b)** Karena Kuuhaku malas untuk menjalankan script tersebut secara manual, ia juga meminta kalian untuk menjalankan script tersebut sehari sekali pada jam 8 malam untuk tanggal-tanggal tertentu setiap bulan, yaitu dari tanggal 1 tujuh hari sekali (1,8,...), serta dari tanggal 2 empat hari sekali(2,6,...). Supaya lebih rapi, gambar yang telah diunduh beserta log-nya, dipindahkan ke folder dengan nama tanggal unduhnya dengan format "DD-MM-YYYY" (contoh : "13-03-2023").  
+**(c)** Agar kuuhaku tidak bosan dengan gambar anak kucing, ia juga memintamu untuk mengunduh gambar kelinci dari "https://loremflickr.com/320/240/bunny". Kuuhaku memintamu mengunduh gambar kucing dan kelinci secara bergantian (yang pertama bebas. contoh : tanggal 30 kucing > tanggal 31 kelinci > tanggal 1 kucing > ... ). Untuk membedakan folder yang berisi gambar kucing dan gambar kelinci, nama folder diberi awalan "Kucing_" atau "Kelinci_" (contoh : "Kucing_13-03-2023").  
+**(d)** Untuk mengamankan koleksi Foto dari Steven, Kuuhaku memintamu untuk membuat script yang akan memindahkan seluruh folder ke zip yang diberi nama “Koleksi.zip” dan mengunci zip tersebut dengan password berupa tanggal saat ini dengan format "MMDDYYYY" (contoh : “03032003”).  
+**(e)** Karena kuuhaku hanya bertemu Steven pada saat kuliah saja, yaitu setiap hari kecuali sabtu dan minggu, dari jam 7 pagi sampai 6 sore, ia memintamu untuk membuat koleksinya ter-zip saat kuliah saja, selain dari waktu yang disebutkan, ia ingin koleksinya ter-unzip dan tidak ada file zip sama sekali.  
+
+Catatan :
+Gunakan bash, AWK, dan command pendukung
+Tuliskan semua cron yang kalian pakai ke file cron3[b/e].tab yang sesuai
+
+### Jawaban 3a  
+Pertama, kita akan memindahkan direktori dari home ke direktori yang kita inginkan  
+```cd /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3``` 
+
+Kemudian, kita membuat file Foto.log untuk menyimpan keterangan saat mendownload foto  
+```touch Foto.log```  
+
+Karena, di soal meminta penamaan Koleksi diawali dengan 0 jika mempunyai urutan ke 0-9 maka kita perlu membuat suatu pengondisian. Jika dalam iterasi, variabel bernilai kurang dari 10 maka nama file diawali dengan 0 sedangkan jika tidak maka akan dinamai sesuai dengan nilai dari variabel. ```wget -a (append)``` berfungsi untuk mendownload dan menambahkan keterangan ke dalam file ```Foto.log``` dan ```-O ``` untuk memberi nama dari file yang didownload
+```
+for((a=1;a<24;a++))
+do
+	if((a<=9))
+	then
+		wget -a /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/Foto.log "https://loremflickr.com/320/240/kitten" -O /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/Koleksi_0"$a".jpeg
+	else
+		wget -a /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/Foto.log "https://loremflickr.com/320/240/kitten" -O /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/Koleksi_"$a".jpeg
+	fi
+done
+```  
+
+Kemudian, untuk mengecek apakah ada yang sama dalam foto tersebut maka kita mengecek satu per satu secara looping.  
+```
+for ((b = 1 ; b < 24 ; b++)); do
+    for ((c = b + 1 ; c < 24 ; c++)); do
+```  
+
+Untuk mengecek foto yang sama menggunakan ```diff Koleksi_"$b".jpeg Koleksi_"$c".jpeg``` dan jika menemukan foto yang sama maka akan membuang foto tersebut dengan menggunakan syntax ```rm Koleksi_"$c".jpeg```  
+
+Terakhir, kita akan melakukan penamaan kembali untuk masing-masing gambar agar tidak ada no yang hilang yang ada foto yang dihapus dengan melakukan iterasi pada masing-masing foto  
+```
+itr=0
+for pic in *.jpeg
+    do
+    let itr=itr+1
+```  
+
+Untuk penamaan menggunakan cara yang sama seperti di atas, jika varibel itr bernilai 0 hingga 9 maka nama file diawali dengan 0 namun jika tidak maka dinamai sesuai dengan nilai dari variabel  
+```
+if((a<=9))
+        then 
+            mv "$pic" "Koleksi_0$itr.jpeg"
+    else 
+        mv "$pic" "Koleksi_$itr.jpeg"
+    fi
+done
+```  
+
+### Jawaban 3b  
+```
+#!/bin/bash
+
+tanggal="$(date +%d)-$(date +%m)-$(date +%Y)"
+mkdir /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/"$tanggal"
+
+cd /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/"$tanggal"
+touch Foto.log
+
+for((a=1;a<24;a++))
+do
+	if((a<=9))
+	then
+		wget -a /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/"$tanggal"/Foto.log "https://loremflickr.com/320/240/kitten" -O /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/"$tanggal"/Koleksi_0"$a".jpeg
+	else
+		wget -a /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/"$tanggal"/Foto.log "https://loremflickr.com/320/240/kitten" -O /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/"$tanggal"/Koleksi_"$a".jpeg
+	fi
+done
+
+for ((b = 1 ; b < 24 ; b++)); do
+    for ((c = b + 1 ; c < 24 ; c++)); do
+        if diff Koleksi_"$b".jpeg Koleksi_"$c".jpeg &> /dev/null; then
+            rm Koleksi_"$c".jpeg
+        fi
+    done
+done
+
+itr=0
+for pic in *.jpeg
+    do
+    let itr=itr+1
+    if((a<=9))
+        then 
+            mv "$pic" "Koleksi_0$itr.jpeg"
+    else 
+        mv "$pic" "Koleksi_$itr.jpeg"
+    fi
+done
+```  
+Cara pengerjaan untuk 3b hampir sama dengan 3a namun foto dan log akan diletakkan pada folder dengan format penamaan "DD-MM-YYYY". Pertama, kita membuat variabel tanggal untuk nama dari folder  
+```
+tanggal="$(date +%d)-$(date +%m)-$(date +%Y)"
+```  
+Kemudian, kita membuat folder nya ```mkdir /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/"$tanggal""```  
+
+Dan kita arahkan direktori kita ke folder yang kelak digunakan untuk menyimpan foto-foto dan log nya  Kemudian untuk langkah selanjutnya, sama dengan cara soal no 3a  
+
+Untuk crontab soal 3b, arti crontab di bawah ini adalah script berjalan sehari sekali pada pukul 8 malam dari tanggal 1 dengan interval 7 hari (ex: 1,8) dan dari tanggal 2 dengan interval 4 hari (ex: 2, 6). ```/bin/bash /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/soal3b.sh``` berarti awk akan diarahkan ke dalam folder ini  
+```00 20 1-31/7,2-31/4 * * /bin/bash /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/soal3b.sh```
+
+### Jawaban 3c 
+
+### Jawaban 3d
+Pertama, kita akan arahkan direktori ke dalam folder kita  
+```cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/```  
+Untuk membuat password dari zip dimana password dibuat berdasarkan format "MMDDYYYY"  
+```tanggal="$(date '+%m%d%Y')"```  
+Terakhir, kita akan melakukan zip folder pada direktori tersebut dengan format di atas  
+```zip -P $tanggal -rm Koleksi.zip */```  
+
+### Jawaban 3e  
+Untuk melakukan zip dari folder yaitu pada jam 7 pagi hingga jam 6 sore hari senin - jumat kecuali hari sabtu dan minggu. ```cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/``` berfungsi untuk mengubah direktori menuju ke folder tempat soal3d.sh berada dan untuk menjalankan soal3d.sh ```bash soal3d.sh```
+```0 7 * * 1-5 cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/ && bash soal3d.sh```  
+
+Sedangkan itu, akan melakukan unzip pada hari selain kuliah berarti dilakukan setelah jam 6 malam. ```cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/``` berfungsi untuk mengubah direktori menuju ke folder tempat zip berada, ```unzip -P `date +\%m\%d\%Y` Koleksi.zip``` berfungsi untuk melakukan unzip dengan password sesuai format dan hanya folder bernama Koleksi.zip yang akan di unzip, dan rm ```Koleksi.zip``` berfungsi untuk menghapus folder Koleksi.zip  
+```0 18 * * 1-5 cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/ && unzip -P `date +\%m\%d\%Y` Koleksi.zip && rm Koleksi.zip```
