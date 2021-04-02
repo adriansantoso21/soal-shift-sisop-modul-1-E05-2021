@@ -437,6 +437,7 @@ Kemudian, kita membuat folder nya ```mkdir /home/adr01/Documents/SesiLab1/SoalPr
 Dan kita arahkan direktori kita ke folder yang kelak digunakan untuk menyimpan foto-foto dan log nya  Kemudian untuk langkah selanjutnya, sama dengan cara soal no 3a  
 
 Untuk crontab soal 3b, arti crontab di bawah ini adalah script berjalan sehari sekali pada pukul 8 malam dari tanggal 1 dengan interval 7 hari (ex: 1,8) dan dari tanggal 2 dengan interval 4 hari (ex: 2, 6). ```/bin/bash /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/soal3b.sh``` berarti awk akan diarahkan ke dalam folder ini  
+Hasil crontab :  
 ```00 20 1-31/7,2-31/4 * * /bin/bash /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/soal3b.sh```
 
 ### Jawaban 3c 
@@ -448,10 +449,27 @@ Untuk membuat password dari zip dimana password dibuat berdasarkan format "MMDDY
 ```tanggal="$(date '+%m%d%Y')"```  
 Terakhir, kita akan melakukan zip folder pada direktori tersebut dengan format di atas  
 ```zip -P $tanggal -rm Koleksi.zip */```  
+Hasil coding :  
+```
+#!/bin/bash
+
+cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/
+
+tanggal="$(date '+%m%d%Y')"
+zip -P $tanggal -rm Koleksi.zip */
+```  
 
 ### Jawaban 3e  
-Untuk melakukan zip dari folder yaitu pada jam 7 pagi hingga jam 6 sore hari senin - jumat kecuali hari sabtu dan minggu. ```cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/``` berfungsi untuk mengubah direktori menuju ke folder tempat soal3d.sh berada dan untuk menjalankan soal3d.sh ```bash soal3d.sh```
+Untuk melakukan zip dari folder yaitu pada jam 7 pagi hingga jam 6 sore hari senin - jumat kecuali hari sabtu dan minggu. ```cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/``` berfungsi untuk mengubah direktori menuju ke folder tempat soal3d.sh berada dan untuk menjalankan soal3d.sh ```bash soal3d.sh```  
+Hasil crontab :  
 ```0 7 * * 1-5 cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/ && bash soal3d.sh```  
 
 Sedangkan itu, akan melakukan unzip pada hari selain kuliah berarti dilakukan setelah jam 6 malam. ```cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/``` berfungsi untuk mengubah direktori menuju ke folder tempat zip berada, ```unzip -P `date +\%m\%d\%Y` Koleksi.zip``` berfungsi untuk melakukan unzip dengan password sesuai format dan hanya folder bernama Koleksi.zip yang akan di unzip, dan rm ```Koleksi.zip``` berfungsi untuk menghapus folder Koleksi.zip  
+Hasil crontab :  
 ```0 18 * * 1-5 cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/ && unzip -P `date +\%m\%d\%Y` Koleksi.zip && rm Koleksi.zip```
+
+
+Kendala selama pengerjaan:
+1. Agak kesulitan untuk menghapus foto yang sama.  
+2. Mengalami kendala saat akan penamaan kembali agar tidak ada no yang hilang.  
+3. Kesulitan saat melakukan zip dan unzip folder khususnya saat menggunakan crontab.  
