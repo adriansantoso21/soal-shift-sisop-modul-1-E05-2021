@@ -427,7 +427,8 @@ if((a<=9))
     fi
 done
 ```  
-![alt text](https://drive.google.com/file/d/1yaWolNuf1SPl-mG9GYuMkBnmOlIif0s5/view?usp=sharing)
+![alt text](http://drive.google.com/uc?export=view&id=1yaWolNuf1SPl-mG9GYuMkBnmOlIif0s5)
+
 
 ### Jawaban 3b  
 ```
@@ -479,9 +480,11 @@ Dan kita arahkan direktori kita ke folder yang kelak digunakan untuk menyimpan f
 
 Untuk crontab soal 3b, arti crontab di bawah ini adalah script berjalan sehari sekali pada pukul 8 malam dari tanggal 1 dengan interval 7 hari (ex: 1,8) dan dari tanggal 2 dengan interval 4 hari (ex: 2, 6). ```/bin/bash /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/soal3b.sh``` berarti awk akan diarahkan ke dalam folder ini  
 Hasil crontab :  
-```00 20 1-31/7,2-31/4 * * /bin/bash /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/soal3b.sh```
+```00 20 1-31/7,2-31/4 * * /bin/bash /home/adr01/Documents/SesiLab1/SoalPraktikum/Soal3/soal3b.sh```  
+![alt text](http://drive.google.com/uc?export=view&id=16bHudz8m2nF_XiDl1qWiNR4Nc4qsU1g8)
 
 ### Jawaban 3c 
+![alt text](http://drive.google.com/uc?export=view&id=1gSXc8yQWXczRJVJhDyIJO0M8Egf4oJ18)
 
 ### Jawaban 3d
 Pertama, kita akan arahkan direktori ke dalam folder kita  
@@ -499,6 +502,7 @@ cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/
 tanggal="$(date '+%m%d%Y')"
 zip -P $tanggal -rm Koleksi.zip */
 ```  
+![alt text](http://drive.google.com/uc?export=view&id=1rz9Gjw7xPcjs_VC14hKqbIzWOnY3wk8g)
 
 ### Jawaban 3e  
 Untuk melakukan zip dari folder yaitu pada jam 7 pagi hingga jam 6 sore hari senin - jumat kecuali hari sabtu dan minggu. ```cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/``` berfungsi untuk mengubah direktori menuju ke folder tempat soal3d.sh berada dan untuk menjalankan soal3d.sh ```bash soal3d.sh```  
