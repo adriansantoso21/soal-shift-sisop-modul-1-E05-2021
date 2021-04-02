@@ -1,5 +1,5 @@
 #zip saat senin-jumat 7pagi-6sore(kuliah)
-* 7 * * 1-5 cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/ && bash soal3d.sh
+0 7 * * 1-5 cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/ && bash soal3d.sh
 
 #unzip selain saat kuliah
 0 18 * * 1-5 cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/ && unzip -P `date +\%m\%d\%Y` Koleksi.zip && rm Koleksi.zip
