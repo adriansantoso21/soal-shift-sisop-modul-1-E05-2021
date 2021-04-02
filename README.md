@@ -517,6 +517,7 @@ Sedangkan itu, akan melakukan unzip pada hari selain kuliah berarti dilakukan se
 Hasil crontab :  
 ```0 18 * * 1-5 cd /media/sf_soal-shift-sisop-modul-1-E05-2021/soal3/ && unzip -P `date +\%m\%d\%Y` Koleksi.zip && rm Koleksi.zip```
 
+![alt text](http://drive.google.com/uc?export=view&id=1gSXc8yQWXczRJVJhDyIJO0M8Egf4oJ18)
 
 Kendala selama pengerjaan:
 1. Agak kesulitan untuk menghapus foto yang sama.  
