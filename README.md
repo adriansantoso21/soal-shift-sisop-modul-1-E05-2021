@@ -231,8 +231,48 @@ Catatan :
 Gunakan bash, AWK, dan command pendukung  
 Script pada poin (e) memiliki nama file ‘soal2_generate_laporan_ihir_shisop.sh’  
 
+Hasil koding keseluruhan untuk no 2:  
+```
+#!/bin/bash
 
-### Jawaban 2a
+awk 'BEGIN{max=0;min=2000000000;min2=2000000000;FS="\t"}
+{
+	if( NR!=1){
+		profitPercentage=($21/($18-$21))*100;
+		if (max <= profitPercentage){
+			max=profitPercentage;
+			rowId=$1;
+		}
+		
+		year=substr($3,7,2)
+		if(year==17 && $10=="Albuquerque") names[$7];
+		
+		transactions[$8]++;
+		
+		regions[$13]+=$21
+	}	
+} 
+END{
+print("Transaksi terakhir dengan profit percentage terbesar yaitu",rowId,"dengan persentase",max,"%.\n")
+print("Daftar nama customer di Albuquerque pada tahun 2017 antara lain:")
+for (name in names) print name
+for (transaction in transactions){
+	if(min>=transactions[transaction]){
+		jenis=transaction
+		min=transactions[transaction]
+	}
+}
+print("\nTipe segmen customer yang penjualannya paling sedikit adalah",jenis,"dengan",min, "transaksi.")
+for (region in regions){
+	if(min2>=regions[region]){
+		region2=region
+		min2=regions[region]
+	}
+}
+print("\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang paling sedikit adalah",region2, "dengan total keuntungan",min2)	
+}' Laporan-TokoShiSop.tsv > hasil.txt
+```  
+### Jawaban 2a  
 Pertama, kita deklarasikan beberapa variabel yaitu ```max``` untuk menyimpan Profit Percentage tertinggi, ```min``` untuk menyimpan banyak transaksi terkecil, ```min2``` untuk menyimpan total profit terkecil, dan FS(Field Separator) dimana di data menggunakan tab(\t)
 ```
 awk 'BEGIN{max=0;min=2000000000;min2=2000000000;FS="\t"}
@@ -387,6 +427,7 @@ if((a<=9))
     fi
 done
 ```  
+![alt text](https://drive.google.com/file/d/1yaWolNuf1SPl-mG9GYuMkBnmOlIif0s5/view?usp=sharing)
 
 ### Jawaban 3b  
 ```
