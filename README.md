@@ -205,21 +205,87 @@ Steven dan Manis mendirikan sebuah startup bernama “TokoShiSop”. Sedangkan k
 
 Tiap tahunnya, TokoShiSop mengadakan Rapat Kerja yang membahas bagaimana hasil penjualan dan strategi kedepannya yang akan diterapkan. Kamu sudah sangat menyiapkan sangat matang untuk raker tahun ini. Tetapi tiba-tiba, Steven, Manis, dan Clemong meminta kamu untuk mencari beberapa kesimpulan dari data penjualan “Laporan-TokoShiSop.tsv”.
 
-### Soal 2a
-Steven ingin mengapresiasi kinerja karyawannya selama ini dengan mengetahui Row ID dan profit percentage terbesar (jika hasil profit percentage terbesar lebih dari 1, maka ambil Row ID yang paling besar). Karena kamu bingung, Clemong memberikan definisi dari profit percentage, yaitu:
+**(a)** Steven ingin mengapresiasi kinerja karyawannya selama ini dengan mengetahui Row ID dan profit percentage terbesar (jika hasil profit percentage terbesar lebih dari 1, maka ambil Row ID yang paling besar). Karena kamu bingung, Clemong memberikan definisi dari profit percentage, yaitu:
 Profit Percentage = (Profit Cost Price) 100
 Cost Price didapatkan dari pengurangan Sales dengan Profit. (Quantity diabaikan).
 
-### Soal 2b
-Clemong memiliki rencana promosi di Albuquerque menggunakan metode MLM. Oleh karena itu, Clemong membutuhkan daftar nama customer pada transaksi tahun 2017 di Albuquerque.
+**(b)** Clemong memiliki rencana promosi di Albuquerque menggunakan metode MLM. Oleh karena itu, Clemong membutuhkan daftar nama customer pada transaksi tahun 2017 di Albuquerque.
 
-### Soal 2c
-TokoShiSop berfokus tiga segment customer, antara lain: Home Office, Customer, dan Corporate. Clemong ingin meningkatkan penjualan pada segmen customer yang paling sedikit. Oleh karena itu, Clemong membutuhkan segment customer dan jumlah transaksinya yang paling sedikit.
+**(c)** TokoShiSop berfokus tiga segment customer, antara lain: Home Office, Customer, dan Corporate. Clemong ingin meningkatkan penjualan pada segmen customer yang paling sedikit. Oleh karena itu, Clemong membutuhkan segment customer dan jumlah transaksinya yang paling sedikit.
 
-### Soal 2d
-TokoShiSop membagi wilayah bagian (region) penjualan menjadi empat bagian, antara lain: Central, East, South, dan West. Manis ingin mencari wilayah bagian (region) yang memiliki total keuntungan (profit) paling sedikit dan total keuntungan wilayah tersebut.
+**(d)** TokoShiSop membagi wilayah bagian (region) penjualan menjadi empat bagian, antara lain: Central, East, South, dan West. Manis ingin mencari wilayah bagian (region) yang memiliki total keuntungan (profit) paling sedikit dan total keuntungan wilayah tersebut.
 
-### Soal 2e
-Agar mudah dibaca oleh Manis, Clemong, dan Steven, kamu diharapkan bisa membuat sebuah script yang akan menghasilkan file “hasil.txt” yang memiliki format sebagai berikut:
+**(e)** Agar mudah dibaca oleh Manis, Clemong, dan Steven, kamu diharapkan bisa membuat sebuah script yang akan menghasilkan file “hasil.txt”.
 
+### Jawaban 2a
+Pertama, kita deklarasikan beberapa variabel yaitu max untuk menyimpan Profit Percentage tertinggi, min untuk menyimpan banyak transaksi terkecil, min2 untuk menyimpan total profit terkecil, dan FS(Field Separator) dimana di data menggunakan tab(\t)
+```
+awk 'BEGIN{max=0;min=2000000000;min2=2000000000;FS="\t"}
+```
+Selanjutnya, akan membaca tiap line dari data dan agar judul dari kolom tidak terbaca maka menggunakan syntax ```if( NR!=1)```
 
+Kita mencari nilai dari Profil Percentage terlebih dahulu dengan rumus di soal ```profitPercentage=($21/($18-$21))*100``` 
+
+Untuk mencari Profil Percentage dan row Id nya, maka kita akan melakukan update setiap membaca baris nya jika kondisional nya terpenuhi
+```
+if (max <= profitPercentage){
+			max=profitPercentage;
+			rowId=$1;
+		}
+```
+
+### Jawaban 2b
+Kita akan mencari tahun transaksi terlebih dahulu dengan menggunakan syntax ```year=substr($3,7,2)``` dimana $3 merupakan kolom dimana kita mencari tahun transaksi, 7 merupakan lokasi awal pencarian karakter dan 2 adalah banyak karakter yang akan diambil
+Jika kondisional memenuhi yaitu tahun transaksi adalah 17 dan lokasi nya berada di Albuquerque, maka kita akan membuat array yang berisi nama pelanggan
+```
+year=substr($3,7,2)
+	if(year==17 && $10=="Albuquerque") names[$7];
+```
+
+### Jawaban 2c
+Untuk mencari segment dengan jumlah transaksi terkecil maka kita akan membuat array yang berisi tipe-tipe dari segment customer yang ada (Home Office, Consumer, dan Corporate) dan akan melakukan increment untuk menyimpan banyak transaksi yang dilakukan
+```
+transactions[$8]++;
+```
+
+### Jawaban 2d
+Untuk mencari region dengan total profit terkecil maka kita juga akan membuat array yang berisi tipe-tipe region yang ada (Central, East, South, dan West) kemudian di dalam array akan menyimpan total profit dengan cara terus menambahkan profit pada array sesuai dengan region yang ada
+```
+regions[$13]+=$21
+```
+
+### Jawaban 2e
+Untuk bagian terakhir maka akan mencetak hasil sesuai dengan format yang diminta
+Untuk mencetak bagian 2a
+```print("Transaksi terakhir dengan profit percentage terbesar yaitu",rowId,"dengan persentase",max,"%.\n")```
+
+Untuk mencetak bagian 2b
+```print("Daftar nama customer di Albuquerque pada tahun 2017 antara lain:")```
+Di sini, untuk mencetak nama masing-masing pelanggan maka kita melakukan iterasi pada array names dan mencetak isi item dalam array nya 
+```for (name in names) print name```
+
+Untuk mencetak bagian 2c
+Kita akan mencari segmen dengan jumlah transaksi terkecil dengan cara melakukan iterasi. Di mana dalam iterasi, jika transaksi saat ini lebih kecil dari pada variabel ```min```  maka akan menyimpan nama section pada ```jenis``` dan akan mengupdate variabel ```min``` dengan besar transaksi saat ini
+```
+for (transaction in transactions){
+	if(min>=transactions[transaction]){
+		jenis=transaction
+		min=transactions[transaction]
+	}
+ print("\nTipe segmen customer yang penjualannya paling sedikit adalah",jenis,"dengan",min, "transaksi.")
+}
+
+```
+
+Untuk mencetak bagian 2d
+Kita akan mencari region dengan total profit terkecil dengan cara melakukan iterasi. Di mana dalam iterasi, jika total profit saat ini lebih kecil dari pada variabel ```min2```  maka akan menyimpan nama region pada ```region2``` dan akan mengupdate variabel ```min2``` dengan total profit saat ini
+```
+for (region in regions){
+	if(min2>=regions[region]){
+		region2=region
+		min2=regions[region]
+	}
+}
+print("\nWilayah bagian (region) yang memiliki total keuntungan (profit) yang paling sedikit adalah",region2, "dengan total keuntungan",min2)	
+
+Terakhir, kita akan memasukkan output dari awk ke dalam file hasil.txt dengan syntax ```Laporan-TokoShiSop.tsv > hasil.txt```
