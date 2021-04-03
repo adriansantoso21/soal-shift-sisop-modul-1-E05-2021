@@ -486,6 +486,104 @@ Hasil crontab :
 ![alt text](http://drive.google.com/uc?export=view&id=16bHudz8m2nF_XiDl1qWiNR4Nc4qsU1g8)
 
 ### Jawaban 3c 
+__Pertama,__ kita membuat fungsi `dir_counter()`. Fungsi tersebut bertujuan agar foto yang diunduh dapat bergantian antara kelinci dan kucing dengan cara menghitung masing-masing jumlah folder yang terdapat dalam suatu direktori dengan awalan "Kelinci_" dan "Kucing_". Apabila terdapat lebih banyak folder dengan awalan "Kelinci_" maka fungsi akan mereturn `1` yang berarti akan membuat script mengunduh gambar kucing, dan apabila lebih banyak "Kucing_" maka akan mereturn `0` sehingga script mengunduh gambar kelinci.
+ ```bash
+dir_counter() {
+    # menghitung jumlah dir kelinci
+    dir_kelinci=$(ls -d Kelinci_* | wc -l)
+    # menghitung jumlah dir kucing
+    dir_kucing=$(ls -d Kucing_* | wc -l)
+
+    # apabila kelinci lebih banyak
+        # maka 1 = mengunduh kucing
+    # apabila kucing lebih banyak atau smdg
+        # maka 0 = mengunduh kelinci
+    if [[ $dir_kucing -lt $dir_kelinci ]]
+    then
+        echo 1
+    else
+        echo 0
+    fi
+}
+```
+
+__Kedua,__ membuat fungsi `download_img()` yang membutuhkan 2 argument yaitu URL untuk mengunduh gambar (argumen pertama / `$1`) dan prefix nama folder berupa "Kucing_" atau "Kelinci_" (argumen kedua / `$2`). Detail kerjanya:
+1. Fungsi dieksekusi, fungsi akan memulai mengunduh 23 gambar dari URL (argumen pertama), menyimpannya dengan nama file  yang diberikan oleh server, dan menyimpan log unduh ke dalam file `Foto.log`
+    ```bash
+    for i in {1..23}
+    do
+        wget $1 --trust-server-names -a "Foto.log"
+    done
+    ```
+2. Meyimpan nama file gambar yang terunduh lebih dari sekali dengan menggunakan wildcard `*.jpg.*`
+    ```bash
+    array_img_duplicate=($(ls *.jpg.*))
+    ```
+    kemudian menghapus file tersebut
+    ```bash
+    for i in "${array_img_duplicate[*]}"
+    do
+        rm $i
+    done
+    ```
+3. Membuat array berisi nama file gambar (.jpg) yang tersisa
+    ```bash
+    array_img=($(ls *.jpg))
+    ```
+    kemudian melakukan iterasi untuk mengganti nama file tersebut menjadi "Koleksi_XX"
+    ```bash
+    for i in ${!array_img[@]}
+    do
+        if [[ $i < 9 ]]
+        then
+            mv "${array_img[$i]}" "Koleksi_0$(($i+1)).jpg"
+        else
+            mv "${array_img[$i]}" "Koleksi_$(($i+1)).jpg"
+        fi
+    done
+    ```
+4. Mendapatkan tanggal dengan format DD/MM/YYYY dari system, dan menggunakannya bersama prefix "Kucing_" atau "Kelinci_" sebagai nama folder yang akan dibuat pada fungsi `movetofolder()`
+    ```bash
+    curr_date=$(date "+%d-%m-%Y")
+    foldername=$2$curr_date
+    movetofolder $foldername
+    ```
+
+__Ketiga,__ membuat fungsi `movetofolder()` yang digunakan untuk membuat folder dan memindahkan semua gambar ke dalamnya. Detail kerjanya:
+1. Membuat array yang berisikan semua nama file gambar (.jpg) yang ada
+    ```bash
+    img_array=($(ls *.jpg))
+    ```
+2. Membuat folder dengan nama yang diberikan argumen `$1`, kemudian memindahkan `Foto.log` berserta semua foto ke dalam folder tersebut
+    ```bash
+    mkdir "$1"
+    mv "Foto.log" "$1/Foto.log"
+    for i in "${!img_array[@]}"
+    do
+        mv "${img_array[$i]}" "$1/${img_array[$i]}"
+    done
+    ```
+
+__Keempat,__ membuat potongan code utama yang berisikan:
+1. Variable `iskucing` untuk menamput nilai yang diberikan fungsi `dir_counter()` yang akan menemtukan hewan yang akan diunduh, URL kucing/kelinci, dan awalan nama folder
+    ```bash
+    iskucing="$(dir_counter)"
+
+    link_kucing="https://loremflickr.com/320/240/kitten"
+    link_kelinci="https://loremflickr.com/320/240/bunny"
+
+    prefix_folder_kucing="Kucing_"
+    prefix_folder_kelinci="Kelinci_"
+    ```
+2. Percabangan, jika `iskucing == 1` maka akan menunduh gambar kucing, jika `iskucing == 0` maka akan mengunduh gambar kelinci
+    ```bash
+    if [[ $iskucing -eq 1 ]]
+    then
+        download_img $link_kucing $prefix_folder_kucing
+    else
+        download_img $link_kelinci $prefix_folder_kelinci
+    fi
+    ```
 
 ![alt text](http://drive.google.com/uc?export=view&id=1gSXc8yQWXczRJVJhDyIJO0M8Egf4oJ18)
 
@@ -521,5 +619,7 @@ Hasil crontab :
 
 Kendala selama pengerjaan:
 1. Agak kesulitan untuk menghapus foto yang sama.  
-2. Mengalami kendala saat akan penamaan kembali agar tidak ada no yang hilang.  
-3. Kesulitan saat melakukan zip dan unzip folder khususnya saat menggunakan crontab.  
+2. Mengalami kendala saat akan penamaan kembali agar tidak ada no yang hilang.
+3. Kurang teliti dalam menulis kode (3c), sehingga salah satu gambar namanya tidak berganti
+4. Kebingungan dalam penggunaan `$*` dan `$@`
+5. Kesulitan saat melakukan zip dan unzip folder khususnya saat menggunakan crontab.  
