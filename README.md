@@ -166,7 +166,7 @@ done
 ```
 Kode di atas  menampilkan semua pesan error yang muncul beserta jumlah kemunculannya dari terbanyak ke terkecil. Dimana `while` melakukan looping terhadap var1 `count` dan var2 ` msgs` untuk membaca semua baris dari grep tersebut dan hasilnya dengan format `Error,Count` akan dimasukkan ke dalam file `error_message.csv`.
 
-![alt text](https://drive.google.com/file/d/18hyTFkXOhaLSYIMKraP4A4tcRBrnfedM/view?usp=sharing)
+![alt text](http://drive.google.com/uc?export=view&id=18hyTFkXOhaLSYIMKraP4A4tcRBrnfedM)
 
 ### Jawaban 1e
 ```
@@ -195,6 +195,8 @@ do
 done
 ```
 Kode di atas  menampilkan jumlah kemunculan log `ERROR` dan `INFO` untuk setiap user-nya. Dimana `while` melakukan looping terhadap var `user` untuk membaca semua baris dari grep tersebut dan hasilnya dengan format `Username,INFO,ERROR` akan dimasukkan ke dalam file `user_statistic.csv`. Kode `n_info=$(grep -w "$user" <<< "$info" | wc -l)` menghitung berapa dari log `INFO` yang ada user tersebut secara match. Kode `n_error=$(grep -w "$user" <<< "$err" | wc -l)` menghitung berapa dari log `ERROR` yang ada user tersebut secara match.
+
+![alt text](http://drive.google.com/uc?export=view&id=1eHDG2R6s1WnYer7fX8-Qtcs4o6u-NMwK)
 
 Kendala selama pengerjaan:
 1. Agak kesulitan dalam menuliskan regex dikarenakan sebelumnya belum pernah mendengar kata tersebut.
