@@ -166,6 +166,7 @@ done
 ```
 Kode di atas  menampilkan semua pesan error yang muncul beserta jumlah kemunculannya dari terbanyak ke terkecil. Dimana `while` melakukan looping terhadap var1 `count` dan var2 ` msgs` untuk membaca semua baris dari grep tersebut dan hasilnya dengan format `Error,Count` akan dimasukkan ke dalam file `error_message.csv`.
 
+![alt text](https://drive.google.com/drive/folders/1RrkkVed66F0R_LcL5P9hEzzHENst3xCP)
 
 ### Jawaban 1e
 ```
