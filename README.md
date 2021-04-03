@@ -1,4 +1,9 @@
-# soal-shift-sisop-modul-1-E05-2021
+# soal-shift-sisop-modul-1-E05-2021  
+
+## Anggota Kelompok  
+1. Nur hidayati 05111940000028
+2. Adrian 05111940000130
+3. Ahmad Aunul 05111940000164
 
 ### Soal No 1
 Ryujin baru saja diterima sebagai IT support di perusahaan Bukapedia. Dia diberikan tugas untuk membuat laporan harian untuk aplikasi internal perusahaan, ticky. Terdapat 2 laporan yang harus dia buat, yaitu laporan daftar peringkat pesan error terbanyak yang dibuat oleh ticky dan laporan penggunaan user pada aplikasi ticky. Untuk membuat laporan tersebut, Ryujin harus melakukan beberapa hal berikut:
